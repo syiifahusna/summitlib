@@ -1,0 +1,24 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
+    <persistence-unit name="summitLibPu" transaction-type="JTA">
+        <!-- Data Source Name -->
+       <jta-data-source>java:/SummitLibDS</jta-data-source>
+
+        <!-- Entities 
+        <class>shopweb.entity.Shop</class>
+        <class>shopweb.entity.Item</class>
+       -->
+
+        <!-- Properties -->
+        <properties>
+            <!-- Hibernate Dialect for PostgreSQL -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+            
+            <!-- Schema Generation -->
+            <property name="javax.persistence.schema-generation.database.action" value="update" />
+
+            <!-- Debugging -->
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+        </properties>
+    </persistence-unit>
+</persistence>
