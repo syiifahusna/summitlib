@@ -45,8 +45,7 @@ public class AuthResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response register(RegisterRequest registerRequest) {
-		Response registeredUser =  authService.saveUser(registerRequest);
-        return registeredUser;
+        return authService.saveUser(registerRequest);
 		
 	}
 	

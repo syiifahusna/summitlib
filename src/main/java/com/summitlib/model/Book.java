@@ -1,7 +1,9 @@
 package com.summitlib.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -31,68 +33,28 @@ public class Book extends Auditable implements Serializable{
 	private String title;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "book_id",referencedColumnName = "id",foreignKey = @ForeignKey(name="fk_book_author"))
-	private List<Author> authors;
+	private Set<Author> authors;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="publisher_id", foreignKey = @ForeignKey(name="fk_publisher_id"))
+	private Publisher publisher;
+	private String description;
 	private int rating;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "book_id",referencedColumnName = "id",foreignKey = @ForeignKey(name="fk_book_comment"))
-	private List<Comment> comments;
-	private String desc;
+	private Set<Comment> comments;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="category_id", foreignKey = @ForeignKey(name="fk_category_id"))
 	private Category category;
 	private int edition;
 	private String language;
-	private int isbn10;
-	private int isbn13;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="publisher_id", foreignKey = @ForeignKey(name="fk_publisher_id"))
-	private Publisher publisher;
+	private BigInteger isbn10;
+	private BigInteger isbn13;
 	private int pages;
-	private boolean available;
+	private boolean status;
 	
 	
 	public Book() {}
-	
-	public Book(Long id, Image img, String title, List<Author> authors, int rating, List<Comment> comments, String desc,
-			Category category, int edition, String language, int isbn10, int isbn13, Publisher publisher, int pages,
-			boolean available) {
-		this.id = id;
-		this.img = img;
-		this.title = title;
-		this.authors = authors;
-		this.rating = rating;
-		this.comments = comments;
-		this.desc = desc;
-		this.category = category;
-		this.edition = edition;
-		this.language = language;
-		this.isbn10 = isbn10;
-		this.isbn13 = isbn13;
-		this.publisher = publisher;
-		this.pages = pages;
-		this.available = available;
-	}
-
-	public Book(Image img, String title, List<Author> authors, int rating, List<Comment> comments, String desc,
-			Category category, int edition, String language, int isbn10, int isbn13, Publisher publisher, int pages,
-			boolean available) {
-		this.img = img;
-		this.title = title;
-		this.authors = authors;
-		this.rating = rating;
-		this.comments = comments;
-		this.desc = desc;
-		this.category = category;
-		this.edition = edition;
-		this.language = language;
-		this.isbn10 = isbn10;
-		this.isbn13 = isbn13;
-		this.publisher = publisher;
-		this.pages = pages;
-		this.available = available;
-	}
-
 
 
 	public Long getId() {
@@ -125,13 +87,33 @@ public class Book extends Auditable implements Serializable{
 	}
 
 
-	public List<Author> getAuthors() {
+	public Set<Author> getAuthors() {
 		return authors;
 	}
 
 
-	public void setAuthors(List<Author> authors) {
+	public void setAuthors(Set<Author> authors) {
 		this.authors = authors;
+	}
+
+
+	public Publisher getPublisher() {
+		return publisher;
+	}
+
+
+	public void setPublisher(Publisher publisher) {
+		this.publisher = publisher;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 
@@ -145,23 +127,13 @@ public class Book extends Auditable implements Serializable{
 	}
 
 
-	public List<Comment> getComments() {
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
-	}
-
-
-	public String getDesc() {
-		return desc;
-	}
-
-
-	public void setDesc(String desc) {
-		this.desc = desc;
 	}
 
 
@@ -195,33 +167,23 @@ public class Book extends Auditable implements Serializable{
 	}
 
 
-	public int getIsbn10() {
+	public BigInteger getIsbn10() {
 		return isbn10;
 	}
 
 
-	public void setIsbn10(int isbn10) {
+	public void setIsbn10(BigInteger isbn10) {
 		this.isbn10 = isbn10;
 	}
 
 
-	public int getIsbn13() {
+	public BigInteger getIsbn13() {
 		return isbn13;
 	}
 
 
-	public void setIsbn13(int isbn13) {
+	public void setIsbn13(BigInteger isbn13) {
 		this.isbn13 = isbn13;
-	}
-
-
-	public Publisher getPublisher() {
-		return publisher;
-	}
-
-
-	public void setPublisher(Publisher publisher) {
-		this.publisher = publisher;
 	}
 
 
@@ -235,17 +197,18 @@ public class Book extends Auditable implements Serializable{
 	}
 
 
-	public boolean isAvailable() {
-		return available;
+	public boolean isStatus() {
+		return status;
 	}
 
 
-	public void setAvailable(boolean available) {
-		this.available = available;
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
+
 	
-	
-	
+
+
 	
 
 

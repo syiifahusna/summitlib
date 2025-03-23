@@ -6,9 +6,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.summitlib.audit.Auditable;
+
 @Entity
 @Table(name = "images")
-public class Image {
+public class Image extends Auditable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

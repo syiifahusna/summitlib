@@ -15,6 +15,7 @@
             
             <!-- Schema Generation -->
             <property name="javax.persistence.schema-generation.database.action" value="update" />
+            
 
             <!-- Debugging -->
             <property name="hibernate.show_sql" value="true" />

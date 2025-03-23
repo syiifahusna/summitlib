@@ -6,9 +6,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.summitlib.audit.Auditable;
+
 @Entity
 @Table(name = "authors")
-public class Author {
+public class Author extends Auditable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

@@ -16,6 +16,7 @@ public class UserDAO {
 	@PersistenceContext(unitName = "summitLibPu")
     private EntityManager entityManager;
 	
+	
 //	public List<User> getUsers(){
 //		TypedQuery<User> query = entityManager.createQuery( 
 //	            "SELECT u FROM User u WHERE u.role = 'user'", User.class); 
