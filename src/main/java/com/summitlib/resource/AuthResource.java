@@ -8,8 +8,10 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -31,8 +33,8 @@ public class AuthResource {
 	@Inject
 	private AuthService authService;
 	
-	@Context
-	private UriInfo uriInfo;
+	//@Context
+	//private UriInfo uriInfo;
 	
 	@GET
 	@Path("/ping")
@@ -44,12 +46,13 @@ public class AuthResource {
 	@Path("/register")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response register(RegisterRequest registerRequest) {
+	public Response register(@Valid RegisterRequest registerRequest) {
         return authService.saveUser(registerRequest);
 		
 	}
 	
 	@POST
+	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response authenticate(@Valid LoginRequest loginRequest) {
@@ -58,13 +61,15 @@ public class AuthResource {
 	}
 	
 	@GET
+	@Path("/profile")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response userProfile() {
 		//return user profile info
 		return null;
 	}
 	
-	@POST
+	@PUT
+	@Path("/profile/{id}/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateUserProfile() {
@@ -72,7 +77,8 @@ public class AuthResource {
 		return null;
 	}
 	
-	@GET
+	@DELETE
+	@Path("/profile/{id}/delete")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deactiveUserProfile() {
 		//deactive user

@@ -64,7 +64,7 @@ public class BookDAO {
 	}
 	
 	//update Book
-	public Book saveBook(Long id,Book updatedBook) {
+	public Book updateBook(Long id,Book updatedBook) {
 		 Book existingBook = entityManager.find(Book.class, id);
 		    
 		    if (existingBook == null) {

@@ -2,6 +2,7 @@ package com.summitlib.resource;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -35,7 +36,7 @@ public class BookResource {
 	@GET
 	@Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-	public Response getBooks(@PathParam("id") long id) {
+	public Response getBooks(@PathParam("id") @NotNull long id) {
 		return bookService.getBook(id);
 	}
 	

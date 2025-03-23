@@ -24,33 +24,17 @@ public class AuthService {
 	
 	public Response saveUser(RegisterRequest registerRequest) {
 		
-		ApiErrorResponse errorResponse;
 		String timeNow = LocalDateTime.now().toString();
-		
-		if(registerRequest.getUsername().isEmpty() ||  registerRequest.getUsername().length()<5  || registerRequest.getUsername().length() > 30) {
-			errorResponse = new ApiErrorResponse(400,"Bad Request","Username is not acceptable",timeNow);
-			
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(errorResponse)
-                    .build();
-		}
-		
-		if(registerRequest.getPassword().isEmpty() ||  registerRequest.getPassword().length()<5  || registerRequest.getPassword().length()>30) {
-			errorResponse = new ApiErrorResponse(400,"Bad Request","Password is not acceptable",timeNow);
-			return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(errorResponse)
-                    .build();
-		}
-		
+	
 		if(userDAO.isUserExists(registerRequest.getUsername())) {
-			errorResponse = new ApiErrorResponse(409,"Conflict","Username already existed",timeNow);
+			ApiErrorResponse<String> errorResponse = new ApiErrorResponse<>(409,"Conflict","Username already existed",timeNow);
 			return Response.status(Response.Status.CONFLICT)
             .entity(errorResponse)
             .build();
 		}
 		
 		//todo : hash password
-		User newUser = new User(registerRequest.getUsername(),registerRequest.getPassword(),Role.USER.toString());
+		User newUser = new User(registerRequest.getEmail(),registerRequest.getUsername(),registerRequest.getPassword(),Role.USER.toString());
 		userDAO.saveUser(newUser);
 		
 		ApiResponse<RegisterRequest> apiResponse = new ApiResponse<>(201,"New user registered",null,timeNow);

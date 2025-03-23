@@ -6,12 +6,14 @@ import java.util.Optional;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.core.Response;
 
 import com.summitlib.dao.BookDAO;
 import com.summitlib.model.Book;
 import com.summitlib.payload.ApiErrorResponse;
 import com.summitlib.payload.ApiResponse;
+import com.summitlib.payload.BookRequest;
 
 @Stateless
 public class BookService {
@@ -48,10 +50,17 @@ public class BookService {
 	            .build();
 	}
 	
-//	//save book
-//	public Response saveBook() {
-//		
-//	}
+	//save book
+	public Response saveBook( BookRequest bookRequest) {
+		String timeNow = LocalDateTime.now().toString();
+		
+		ApiResponse<Book> apiResponse = new ApiResponse<>(200,"Testing api to save book",null ,timeNow);
+		return Response.status(Response.Status.OK)
+	            .entity(apiResponse)
+	            .build();
+	}
+	
+	
 //	
 //	//update book
 //	public Response updateBook() {

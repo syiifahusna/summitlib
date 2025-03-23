@@ -19,20 +19,24 @@ public class User extends Auditable implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String email;
 	private String username;
 	private String password;
 	private String role;
 	
 	public User() {}
 	
-	public User(Long id, String username, String password, String role) {
+	public User(Long id, String email, String username, String password, String role) {
+		super();
 		this.id = id;
+		this.email = email;
 		this.username = username;
 		this.password = password;
 		this.role = role;
 	}
-	
-	public User(String username, String password, String role) {
+
+	public User(String email, String username, String password, String role) {
+		this.email = email;
 		this.username = username;
 		this.password = password;
 		this.role = role;
@@ -44,6 +48,14 @@ public class User extends Auditable implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getUsername() {
@@ -69,5 +81,7 @@ public class User extends Auditable implements Serializable{
 	public void setRole(String role) {
 		this.role = role;
 	}
+	
+	
 
 }
