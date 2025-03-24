@@ -4,18 +4,18 @@ public class ApiErrorResponse<T> {
 	
 	 	private int status;
 	    private  String error;
-	    private  T data;
+	    private  T messages;
 	    private  String timestamp;
 	    
 	    
 	    public ApiErrorResponse() {}
 
 
-		public ApiErrorResponse(int status, String error, T data, String timestamp) {
+		public ApiErrorResponse(int status, String error, T messages, String timestamp) {
 			super();
 			this.status = status;
 			this.error = error;
-			this.data = data;
+			this.messages = messages;
 			this.timestamp = timestamp;
 		}
 
@@ -41,12 +41,12 @@ public class ApiErrorResponse<T> {
 
 
 		public T getData() {
-			return data;
+			return messages;
 		}
 
 
-		public void setData(T data) {
-			this.data = data;
+		public void setData(T messages) {
+			this.messages = messages;
 		}
 
 

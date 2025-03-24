@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -30,6 +31,7 @@ public class Book extends Auditable implements Serializable{
 	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name="img_id",referencedColumnName = "id", foreignKey = @ForeignKey(name="fk_img_id"))
 	private Image img;
+	@Column(nullable = false, length = 255)
 	private String title;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "book_id",referencedColumnName = "id",foreignKey = @ForeignKey(name="fk_book_author"))
@@ -37,8 +39,8 @@ public class Book extends Auditable implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="publisher_id", foreignKey = @ForeignKey(name="fk_publisher_id"))
 	private Publisher publisher;
+	@Column(length = 1000)
 	private String description;
-	private int rating;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "book_id",referencedColumnName = "id",foreignKey = @ForeignKey(name="fk_book_comment"))
 	private Set<Comment> comments;
@@ -48,13 +50,54 @@ public class Book extends Auditable implements Serializable{
 	private Category category;
 	private int edition;
 	private String language;
-	private BigInteger isbn10;
-	private BigInteger isbn13;
+	 @Column(unique = true, length = 10)
+    private String isbn10;
+	 @Column(unique = true, length = 13)
+    private String isbn13;
 	private int pages;
 	private boolean status;
 	
 	
 	public Book() {}
+	
+	public Book(Long id, Image img, String title, Set<Author> authors, Publisher publisher, String description,
+			Set<Comment> comments, Category category, int edition, String language, String isbn10,
+			String isbn13, int pages, boolean status) {
+		super();
+		this.id = id;
+		this.img = img;
+		this.title = title;
+		this.authors = authors;
+		this.publisher = publisher;
+		this.description = description;
+		this.comments = comments;
+		this.category = category;
+		this.edition = edition;
+		this.language = language;
+		this.isbn10 = isbn10;
+		this.isbn13 = isbn13;
+		this.pages = pages;
+		this.status = status;
+	}
+	
+	public Book(Image img, String title, Set<Author> authors, Publisher publisher, String description,
+			Set<Comment> comments, Category category, int edition, String language, String isbn10,
+			String isbn13, int pages, boolean status) {
+		this.img = img;
+		this.title = title;
+		this.authors = authors;
+		this.publisher = publisher;
+		this.description = description;
+		this.comments = comments;
+		this.category = category;
+		this.edition = edition;
+		this.language = language;
+		this.isbn10 = isbn10;
+		this.isbn13 = isbn13;
+		this.pages = pages;
+		this.status = status;
+	}
+
 
 
 	public Long getId() {
@@ -116,17 +159,6 @@ public class Book extends Auditable implements Serializable{
 		this.description = description;
 	}
 
-
-	public int getRating() {
-		return rating;
-	}
-
-
-	public void setRating(int rating) {
-		this.rating = rating;
-	}
-
-
 	public Set<Comment> getComments() {
 		return comments;
 	}
@@ -167,22 +199,22 @@ public class Book extends Auditable implements Serializable{
 	}
 
 
-	public BigInteger getIsbn10() {
+	public String getIsbn10() {
 		return isbn10;
 	}
 
 
-	public void setIsbn10(BigInteger isbn10) {
+	public void setIsbn10(String isbn10) {
 		this.isbn10 = isbn10;
 	}
 
 
-	public BigInteger getIsbn13() {
+	public String getIsbn13() {
 		return isbn13;
 	}
 
 
-	public void setIsbn13(BigInteger isbn13) {
+	public void setIsbn13(String isbn13) {
 		this.isbn13 = isbn13;
 	}
 
