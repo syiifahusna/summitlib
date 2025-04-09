@@ -40,6 +40,23 @@ public class BookResource {
 		return bookService.getBook(id);
 	}
 	
+	@GET
+	@Path("/categories")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Response getCategories() {
+		return bookService.getCategories();
+	}
+	
+	//find book
+	
+	
+	
+
+	
+	
+	
+	
+	
 	
 
 }

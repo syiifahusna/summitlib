@@ -60,31 +60,5 @@ public class AuthResource {
 		return null;
 	}
 	
-	@GET
-	@Path("/profile")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response userProfile() {
-		//return user profile info
-		return null;
-	}
-	
-	@PUT
-	@Path("/profile/{id}/update")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response updateUserProfile() {
-		//update user
-		return null;
-	}
-	
-	@DELETE
-	@Path("/profile/{id}/delete")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response deactiveUserProfile() {
-		//deactive user
-		return null;
-	}
-	
-	
 
 }

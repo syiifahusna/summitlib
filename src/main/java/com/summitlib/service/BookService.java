@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import javax.ws.rs.core.Response;
 
 import com.summitlib.dao.BookDAO;
+import com.summitlib.dao.CategoryDAO;
 import com.summitlib.model.Author;
 import com.summitlib.model.Book;
 import com.summitlib.model.Category;
@@ -26,6 +27,9 @@ public class BookService {
 	
 	@Inject
 	private BookDAO bookDAO;
+	
+	@Inject
+	private CategoryDAO categoryDAO;
 	
 	public Response getBooks() {		
 		List<Book> books = bookDAO.findBooksByStatusIsTrue();
@@ -54,7 +58,6 @@ public class BookService {
 	            .build();
 	}
 	
-	//save book
 	public Response saveBook( BookRequest bookRequest) {
 		
 		Book newBook = new Book(null, 
@@ -76,6 +79,16 @@ public class BookService {
 		String timeNow = LocalDateTime.now().toString();
 		
 		ApiResponse<Book> apiResponse = new ApiResponse<>(200,"new book created",book ,timeNow);
+		return Response.status(Response.Status.OK)
+	            .entity(apiResponse)
+	            .build();
+	}
+
+	public Response getCategories() {
+		List<Category> categories = categoryDAO.findCategory();
+		
+		String timeNow = LocalDateTime.now().toString();
+		ApiResponse<List<Category>> apiResponse = new ApiResponse<>(200,"Categories retrieve", categories,timeNow);
 		return Response.status(Response.Status.OK)
 	            .entity(apiResponse)
 	            .build();
