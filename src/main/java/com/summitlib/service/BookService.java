@@ -93,6 +93,15 @@ public class BookService {
 	            .entity(apiResponse)
 	            .build();
 	}
+
+	public Response getRecommendedBooks(int limit, int offset) {
+		List<Book> books = bookDAO.findBooksByRating(limit,offset);
+		String timeNow = LocalDateTime.now().toString();
+		ApiResponse<List<Book>> apiResponse = new ApiResponse<>(200,"Books retrieve", books,timeNow);
+		return Response.status(Response.Status.OK)
+	            .entity(apiResponse)
+	            .build();
+	}
 	
 	
 //	

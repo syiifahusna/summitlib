@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import com.summitlib.model.Book;
+import com.summitlib.model.Category;
 
 @Stateless
 public class BookDAO {
@@ -88,5 +89,31 @@ public class BookDAO {
 	    
 	    return book;
 	}
+	
+	//get books by categories (pagination)
+	public List<Book> findBooksByCategory(Long categoryId, int page, int size) {
+	    String jpql = "SELECT b FROM Book b WHERE b.category.id = :categoryId";
+	    
+	    return entityManager.createQuery(jpql, Book.class)
+	                        .setParameter("categoryId", categoryId)
+	                        .setFirstResult(page * size) // Offset
+	                        .setMaxResults(size)         // Limit
+	                        .getResultList();
+	}
+	
+	//get res by categories
+	public List<Book> findBooksByRating(int limit, int offset){
+		String jpql = "SELECT b FROM Book b " 
+				+ "LEFT JOIN FETCH b.authors "
+		 		+ "LEFT JOIN FETCH b.publisher "
+		 		+ "LEFT JOIN FETCH b.category "
+		 		+ "LEFT JOIN FETCH b.comments "
+		 		+ "LEFT JOIN FETCH b.img  "
+				+ "ORDER BY b.createdDate DESC";
 
+	    return entityManager.createQuery(jpql, Book.class)
+		    		 .setFirstResult(offset)
+	                 .setMaxResults(limit)
+	                 .getResultList();
+	}
 }

@@ -14,13 +14,11 @@ public class CategoryDAO {
 	@PersistenceContext(unitName = "summitLibPu")
     private EntityManager entityManager;
 	
-	//get All categories
+	//get all categories
 	public List<Category> findCategory(){
-		
 		 String jpql = "SELECT c FROM Category c ORDER BY c.id ASC";
 	     TypedQuery<Category> query = entityManager.createQuery(jpql, Category.class);
 	    return query.getResultList();
-		
 	}
 
 }

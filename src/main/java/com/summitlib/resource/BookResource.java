@@ -4,10 +4,12 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -45,6 +47,15 @@ public class BookResource {
     @Produces(MediaType.APPLICATION_JSON)
 	public Response getCategories() {
 		return bookService.getCategories();
+	}
+	
+	//recommended book
+	@GET
+	@Path("/recommended")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Response getRecommendedBooks(@QueryParam("limit") @DefaultValue("10") int limit,
+            																	  @QueryParam("offset") @DefaultValue("0") int offset) {
+		return bookService.getRecommendedBooks(limit,offset);
 	}
 	
 	//find book
