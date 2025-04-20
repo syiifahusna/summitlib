@@ -60,13 +60,21 @@ public class BookService {
 	
 	public Response saveBook( BookRequest bookRequest) {
 		
+		//get category object
+		Optional<Category> Optionalcategory = categoryDAO.findCategoryById(bookRequest.getCategoryId());
+		Category category = null;
+		
+		if(Optionalcategory.isPresent()) {
+			category = Optionalcategory.get();
+		}
+		
 		Book newBook = new Book(null, 
 				bookRequest.getTitle(), 
 				bookRequest.getAuthors(), 
 				null, 
 				bookRequest.getDesc(),
 				null, 
-				null,
+				category,
 				bookRequest.getEdition(), 
 				bookRequest.getLanguage(), 
 				bookRequest.getIsbn10(),
@@ -93,9 +101,37 @@ public class BookService {
 	            .entity(apiResponse)
 	            .build();
 	}
+	
+
+	public Response getCategory(long id) {
+		Optional<Category> Optionalcategory = categoryDAO.findCategoryById(id);
+		String timeNow = LocalDateTime.now().toString();
+		
+		if(Optionalcategory.isEmpty()) {
+			ApiErrorResponse<String> errorResponse = new ApiErrorResponse<>(400,"Bad Request","Category with id " + id + " not found",timeNow);
+			
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errorResponse)
+                    .build();
+		}
+		
+		ApiResponse<Category> apiResponse = new ApiResponse<>(200,"Categories retrieve", Optionalcategory.get() ,timeNow);
+		return Response.status(Response.Status.OK)
+	            .entity(apiResponse)
+	            .build();
+	}
+	
+	public Response getCategoryBooks(long id, int limit, int offset) {
+		List<Book> books = bookDAO.findBooksByCategory(id,  limit, offset);
+		String timeNow = LocalDateTime.now().toString();
+		ApiResponse<List<Book>> apiResponse = new ApiResponse<>(200,"Books retrieve", books,timeNow);
+		return Response.status(Response.Status.OK)
+	            .entity(apiResponse)
+	            .build();
+	}
 
 	public Response getRecommendedBooks(int limit, int offset) {
-		List<Book> books = bookDAO.findBooksByRating(limit,offset);
+		List<Book> books = bookDAO.findBooksByCreatedDate(limit,offset);
 		String timeNow = LocalDateTime.now().toString();
 		ApiResponse<List<Book>> apiResponse = new ApiResponse<>(200,"Books retrieve", books,timeNow);
 		return Response.status(Response.Status.OK)
@@ -103,17 +139,14 @@ public class BookService {
 	            .build();
 	}
 	
-	
-//	
-//	//update book
-//	public Response updateBook() {
-//		
-//	}
-//	
-//	//disable book
-//	public Response disableBook() {
-//		
-//	}
-	
+	public Response getRelatedBooks(long id, int limit, int offset) {
+		//algorithm for related books
+		
+		String timeNow = LocalDateTime.now().toString();
+		ApiResponse<List<Book>> apiResponse = new ApiResponse<>(200,"Books retrieve", null,timeNow);
+		return Response.status(Response.Status.OK)
+	            .entity(apiResponse)
+	            .build();
+	}
 
 }

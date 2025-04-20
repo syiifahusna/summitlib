@@ -63,7 +63,6 @@ public class Book extends Auditable implements Serializable{
 	public Book(Long id, Image img, String title, Set<Author> authors, Publisher publisher, String description,
 			Set<Comment> comments, Category category, int edition, String language, String isbn10,
 			String isbn13, int pages, boolean status) {
-		super();
 		this.id = id;
 		this.img = img;
 		this.title = title;

@@ -49,7 +49,22 @@ public class BookResource {
 		return bookService.getCategories();
 	}
 	
-	//recommended book
+	@GET
+	@Path("/categories/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Response getCategory(@PathParam("id") long id) {
+		return bookService.getCategory(id);
+	}
+	
+	@GET
+	@Path("/category/book/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Response getCategoryBooks(@PathParam("id") long id,
+																		@QueryParam("limit") @DefaultValue("10") int limit,
+            													       @QueryParam("offset") @DefaultValue("0") int offset) {
+		return bookService.getCategoryBooks(id, limit,offset);
+	}
+	
 	@GET
 	@Path("/recommended")
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,7 +73,15 @@ public class BookResource {
 		return bookService.getRecommendedBooks(limit,offset);
 	}
 	
-	//find book
+	@GET
+	@Path("/related/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Response getRelatedBooks(@PathParam("id") long id,
+																	@QueryParam("limit") @DefaultValue("10") int limit,
+            														@QueryParam("offset") @DefaultValue("0") int offset) {
+		return bookService.getRelatedBooks(id,limit,offset);
+	}
+	
 	
 	
 	

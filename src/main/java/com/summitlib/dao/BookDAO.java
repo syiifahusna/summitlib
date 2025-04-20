@@ -19,7 +19,6 @@ public class BookDAO {
 	@PersistenceContext(unitName = "summitLibPu")
     private EntityManager entityManager;
 	
-	//getAll books with status true
 	public List<Book> findBooksByStatusIsTrue(){
 		
 		 String jpql = "SELECT b FROM Book b "
@@ -35,7 +34,6 @@ public class BookDAO {
 		
 	}
 	
-	//get book with status true
 	public Optional<Book> findBookByStatusIsTrue(Long id){
 		String jpql = "SELECT b FROM Book b "
 				+ "LEFT JOIN FETCH b.authors "
@@ -54,7 +52,6 @@ public class BookDAO {
 	    }
 	}
 	
-	//save book
 	public Book saveBook(Book newBook) {
 		  if (newBook.getId() == null) {
 		        entityManager.persist(newBook);
@@ -64,7 +61,6 @@ public class BookDAO {
 		    return newBook;
 	}
 	
-	//update Book
 	public Book updateBook(Long id,Book updatedBook) {
 		 Book existingBook = entityManager.find(Book.class, id);
 		    
@@ -76,7 +72,6 @@ public class BookDAO {
 		    return entityManager.merge(updatedBook);
 	}
 	
-	//disable book
 	public Book disableBook(Long id) {
 	    Book book = entityManager.find(Book.class, id);
 	    
@@ -90,19 +85,23 @@ public class BookDAO {
 	    return book;
 	}
 	
-	//get books by categories (pagination)
-	public List<Book> findBooksByCategory(Long categoryId, int page, int size) {
-	    String jpql = "SELECT b FROM Book b WHERE b.category.id = :categoryId";
-	    
-	    return entityManager.createQuery(jpql, Book.class)
-	                        .setParameter("categoryId", categoryId)
-	                        .setFirstResult(page * size) // Offset
-	                        .setMaxResults(size)         // Limit
-	                        .getResultList();
+	public List<Book> findBooksByCategory(Long categoryId, int limit, int offset) {
+		  String jpql = "SELECT b FROM Book b " 
+					+ "LEFT JOIN FETCH b.authors "
+			 		+ "LEFT JOIN FETCH b.publisher "
+			 		+ "LEFT JOIN FETCH b.category "
+			 		+ "LEFT JOIN FETCH b.comments "
+			 		+ "LEFT JOIN FETCH b.img  "
+			 		+ "WHERE b.category.id = :categoryId";
+		    
+		    return entityManager.createQuery(jpql, Book.class)
+		                        .setParameter("categoryId", categoryId)
+		                   	 	.setFirstResult(offset)
+		                   	 	.setMaxResults(limit)
+		   	                 	.getResultList();
 	}
 	
-	//get res by categories
-	public List<Book> findBooksByRating(int limit, int offset){
+	public List<Book> findBooksByCreatedDate(int limit, int offset){
 		String jpql = "SELECT b FROM Book b " 
 				+ "LEFT JOIN FETCH b.authors "
 		 		+ "LEFT JOIN FETCH b.publisher "
@@ -116,4 +115,6 @@ public class BookDAO {
 	                 .setMaxResults(limit)
 	                 .getResultList();
 	}
+
+
 }
