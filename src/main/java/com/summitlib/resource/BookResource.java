@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -80,6 +81,18 @@ public class BookResource {
 																	@QueryParam("limit") @DefaultValue("10") int limit,
             														@QueryParam("offset") @DefaultValue("0") int offset) {
 		return bookService.getRelatedBooks(id,limit,offset);
+	}
+	
+	
+	@GET
+	@Path("/find")
+    @Produces(MediaType.APPLICATION_JSON)
+	public Response getSearchBooks(@QueryParam("searchTerm")  String searchTerm,
+																   @QueryParam("type")  String type,
+																   @QueryParam("limit") @DefaultValue("10") int limit,
+			 													   @QueryParam("offset") @DefaultValue("0") int offset) {
+		
+		return bookService.getSearchBooks(searchTerm, type, limit, offset);
 	}
 	
 	

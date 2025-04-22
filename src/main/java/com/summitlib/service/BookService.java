@@ -140,10 +140,44 @@ public class BookService {
 	}
 	
 	public Response getRelatedBooks(long id, int limit, int offset) {
-		//algorithm for related books
+		//create algorithm for suggesting related books
 		
 		String timeNow = LocalDateTime.now().toString();
 		ApiResponse<List<Book>> apiResponse = new ApiResponse<>(200,"Books retrieve", null,timeNow);
+		return Response.status(Response.Status.OK)
+	            .entity(apiResponse)
+	            .build();
+	}
+	
+	public Response getSearchBooks(String searchTerm, String type, int limit, int offset) {
+		String timeNow = LocalDateTime.now().toString();
+		
+		if (type == null || type.isEmpty()) {
+            type = "title";
+        }
+		
+		 if (searchTerm == null || searchTerm.trim().isEmpty()) {
+				ApiErrorResponse<String> errorResponse = new ApiErrorResponse<>(400,"Bad Request","Search cannot be empty",timeNow);
+				return Response.status(Response.Status.BAD_REQUEST)
+	                    .entity(errorResponse)
+	                    .build();
+		 }
+        
+        List<Book> books;
+        switch (type.toLowerCase().trim()) {
+            case "author":
+                books = bookDAO.findBooksByAuthor(searchTerm,limit,offset);
+                break;
+            case "isbn":
+                books = bookDAO.findBooksByISBN(searchTerm,limit,offset);
+                break;
+            case "title":
+            default:
+                books = bookDAO.findBooksByTitle(searchTerm,limit,offset);
+                break;
+        }	
+		
+		ApiResponse<List<Book>> apiResponse = new ApiResponse<>(200,"Books retrieve", books,timeNow);
 		return Response.status(Response.Status.OK)
 	            .entity(apiResponse)
 	            .build();

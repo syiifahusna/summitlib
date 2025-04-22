@@ -92,7 +92,8 @@ public class BookDAO {
 			 		+ "LEFT JOIN FETCH b.category "
 			 		+ "LEFT JOIN FETCH b.comments "
 			 		+ "LEFT JOIN FETCH b.img  "
-			 		+ "WHERE b.category.id = :categoryId";
+			 		+ "WHERE b.category.id = :categoryId "
+			 		+ "AND b.status = true";
 		    
 		    return entityManager.createQuery(jpql, Book.class)
 		                        .setParameter("categoryId", categoryId)
@@ -108,12 +109,66 @@ public class BookDAO {
 		 		+ "LEFT JOIN FETCH b.category "
 		 		+ "LEFT JOIN FETCH b.comments "
 		 		+ "LEFT JOIN FETCH b.img  "
+		 		+ "WHERE b.status = true "
 				+ "ORDER BY b.createdDate DESC";
 
 	    return entityManager.createQuery(jpql, Book.class)
 		    		 .setFirstResult(offset)
 	                 .setMaxResults(limit)
 	                 .getResultList();
+	}
+	
+	public List<Book> findBooksByTitle(String searchTerm, int limit, int offset){
+				 String jpql = "SELECT b FROM Book b "
+					 		+ "LEFT JOIN FETCH b.authors "
+					 		+ "LEFT JOIN FETCH b.publisher "
+					 		+ "LEFT JOIN FETCH b.category "
+					 		+ "LEFT JOIN FETCH b.comments "
+					 		+ "LEFT JOIN FETCH b.img  "
+					 		+ "WHERE b.status = true "
+					 		+ "AND LOWER(b.title) LIKE LOWER(:searchTerm)";
+						    
+			    return entityManager.createQuery(jpql, Book.class)
+			    				.setParameter("searchTerm", "%" + searchTerm + "%")
+			    				.setFirstResult(offset)
+				                .setMaxResults(limit)
+				                .getResultList();
+	}
+	
+	public List<Book> findBooksByAuthor(String searchTerm, int limit, int offset){
+				String jpql = "SELECT DISTINCT b FROM Book b "
+			                + "JOIN b.authors a "
+			                + "LEFT JOIN FETCH b.authors "
+			                + "LEFT JOIN FETCH b.publisher "
+			                + "LEFT JOIN FETCH b.category "
+			                + "LEFT JOIN FETCH b.comments "
+			                + "LEFT JOIN FETCH b.img "
+			                + "WHERE b.status = true "
+			                + "AND LOWER(a.name) LIKE LOWER(:searchTerm)";
+					    
+				 return entityManager.createQuery(jpql, Book.class)
+		 				.setParameter("searchTerm", "%" + searchTerm + "%")
+		 				.setFirstResult(offset)
+		                .setMaxResults(limit)
+		                .getResultList();
+	}
+	
+	public List<Book> findBooksByISBN(String searchTerm, int limit, int offset){	            
+	            String jpql = "SELECT b FROM Book b "
+	    		 		+ "LEFT JOIN FETCH b.authors "
+	    		 		+ "LEFT JOIN FETCH b.publisher "
+	    		 		+ "LEFT JOIN FETCH b.category "
+	    		 		+ "LEFT JOIN FETCH b.comments "
+	    		 		+ "LEFT JOIN FETCH b.img  "
+	    		 		+ "WHERE b.status = true "
+	    		 		+ "AND b.isbn13 LIKE :searchTerm "
+	    		 		+ "OR b.isbn10 LIKE :searchTerm";
+	    			    
+	            return entityManager.createQuery(jpql, Book.class)
+	     				.setParameter("searchTerm", "%" + searchTerm + "%")
+	     				.setFirstResult(offset)
+	                    .setMaxResults(limit)
+	                    .getResultList();
 	}
 
 
