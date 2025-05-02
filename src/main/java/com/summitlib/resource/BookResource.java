@@ -74,15 +74,15 @@ public class BookResource {
 		return bookService.getRecommendedBooks(limit,offset);
 	}
 	
-	@GET
-	@Path("/related/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-	public Response getRelatedBooks(@PathParam("id") long id,
-																	@QueryParam("limit") @DefaultValue("10") int limit,
-            														@QueryParam("offset") @DefaultValue("0") int offset) {
-		return bookService.getRelatedBooks(id,limit,offset);
-	}
-	
+//	@GET
+//	@Path("/related/{id}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//	public Response getRelatedBooks(@PathParam("id") long id,
+//																	@QueryParam("limit") @DefaultValue("10") int limit,
+//            														@QueryParam("offset") @DefaultValue("0") int offset) {
+//		return bookService.getRelatedBooks(id,limit,offset);
+//	}
+//	
 	
 	@GET
 	@Path("/find")

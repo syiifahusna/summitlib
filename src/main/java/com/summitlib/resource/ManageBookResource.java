@@ -1,5 +1,7 @@
 package com.summitlib.resource;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -34,5 +36,12 @@ public class ManageBookResource {
 	}
 	
 	//save update disable book
+	@POST
+	@Path("/saves")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Response saveBooks(List<BookRequest> bookRequests) {
+        return bookService.saveBooks(bookRequests);
+    }
 	
 }

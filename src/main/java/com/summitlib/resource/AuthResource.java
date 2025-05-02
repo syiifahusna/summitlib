@@ -56,8 +56,7 @@ public class AuthResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response authenticate(@Valid LoginRequest loginRequest) {
-		//response with jwt token
-		return null;
+		return authService.authenticateUser(loginRequest);
 	}
 	
 

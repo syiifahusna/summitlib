@@ -47,7 +47,6 @@ public class BookService {
 		
 		if(Optionalbook.isEmpty()) {
 			ApiErrorResponse<String> errorResponse = new ApiErrorResponse<>(400,"Bad Request","Book with id " + id + " not found",timeNow);
-			
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(errorResponse)
                     .build();
@@ -60,13 +59,27 @@ public class BookService {
 	
 	public Response saveBook( BookRequest bookRequest) {
 		
-		//get category object
-		Optional<Category> Optionalcategory = categoryDAO.findCategoryById(bookRequest.getCategoryId());
-		Category category = null;
+		String timeNow = LocalDateTime.now().toString();
 		
-		if(Optionalcategory.isPresent()) {
-			category = Optionalcategory.get();
+		if(bookDAO.existByISBN10(bookRequest.getIsbn10())) {
+			ApiErrorResponse<String> errorResponse = 
+					new ApiErrorResponse<>(409,"Conflict","Isbn10 already exist",timeNow);
+			
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errorResponse)
+                    .build();
 		}
+		
+		if(bookDAO.existByISBN13(bookRequest.getIsbn13())) {
+			ApiErrorResponse<String> errorResponse = 
+					new ApiErrorResponse<>(409,"Conflict","Isbn13 already exist",timeNow);
+			
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errorResponse)
+                    .build();
+		}
+		
+		Category category = gatCategory(bookRequest.getCategoryId());
 		
 		Book newBook = new Book(null, 
 				bookRequest.getTitle(), 
@@ -84,13 +97,60 @@ public class BookService {
 		
 		Book book = bookDAO.saveBook(newBook);
 		
-		String timeNow = LocalDateTime.now().toString();
-		
-		ApiResponse<Book> apiResponse = new ApiResponse<>(200,"new book created",book ,timeNow);
+		ApiResponse<Book> apiResponse = new ApiResponse<>(200,"New book created",book ,timeNow);
 		return Response.status(Response.Status.OK)
 	            .entity(apiResponse)
 	            .build();
 	}
+	
+	
+	public Response saveBooks(List<BookRequest> bookRequests) {
+		String timeNow = LocalDateTime.now().toString();
+		
+		for (BookRequest req : bookRequests) {
+			
+			if(bookDAO.existByISBN10(req.getIsbn10())) {
+				ApiErrorResponse<String> errorResponse = 
+						new ApiErrorResponse<>(409,"Conflict","Isbn10 already exist for book " + req.getTitle(),timeNow);
+				
+	            return Response.status(Response.Status.BAD_REQUEST)
+	                    .entity(errorResponse)
+	                    .build();
+			}
+			
+			if(bookDAO.existByISBN13(req.getIsbn13())) {
+				ApiErrorResponse<String> errorResponse = 
+						new ApiErrorResponse<>(409,"Conflict","Isbn13 already exist for book " + req.getTitle(),timeNow);
+				
+	            return Response.status(Response.Status.BAD_REQUEST)
+	                    .entity(errorResponse)
+	                    .build();
+			}
+			
+			Category category = gatCategory(req.getCategoryId());
+			
+			Book newBook = new Book(null, 
+					req.getTitle(), 
+					req.getAuthors(), 
+					null, 
+					req.getDesc(),
+					null, 
+					category,
+					req.getEdition(), 
+					req.getLanguage(), 
+					req.getIsbn10(),
+					req.getIsbn13(), 
+					req.getPages(), 
+					true);
+		}
+
+		ApiResponse<Book> apiResponse = new ApiResponse<>(200,"New books created", null ,timeNow);
+		return Response.status(Response.Status.OK)
+	            .entity(apiResponse)
+	            .build();
+	}
+	
+	
 
 	public Response getCategories() {
 		List<Category> categories = categoryDAO.findCategory();
@@ -183,4 +243,15 @@ public class BookService {
 	            .build();
 	}
 
+	
+	public Category gatCategory(long id) {
+		//get category object
+		Optional<Category> Optionalcategory = categoryDAO.findCategoryById(id);
+		
+		if(Optionalcategory.isPresent()) {
+			return Optionalcategory.get();
+		}
+		
+		return null;
+	}
 }

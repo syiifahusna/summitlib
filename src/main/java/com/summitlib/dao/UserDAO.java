@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -43,13 +44,19 @@ public class UserDAO {
 		
 	}
 	
-	public Optional<User> findUserByUsername(String username){
-		 try {
-	            User user = entityManager.find(User.class, username);
-	            return Optional.ofNullable(user);
-	        } catch (Exception e) {
-	            return Optional.empty();
-	        }
+	public Optional<User> findUserByUsername(String username) {
+	    try {
+	        User user = entityManager
+	            .createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+	            .setParameter("username", username)
+	            .getSingleResult();
+	        return Optional.of(user);
+	    } catch (NoResultException e) {
+	        return Optional.empty();
+	    } catch (Exception e) {
+	        e.printStackTrace(); // or use logging
+	        return Optional.empty();
+	    }
 	}
 	
 	

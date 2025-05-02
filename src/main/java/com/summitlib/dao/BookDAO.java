@@ -52,6 +52,22 @@ public class BookDAO {
 	    }
 	}
 	
+	public boolean existByISBN10(String isbn10) {
+		String jpql = "SELECT COUNT(b) FROM Book b WHERE b.isbn10 = :isbn10";
+	    Long count = entityManager.createQuery(jpql, Long.class)
+	                              .setParameter("isbn10", isbn10)
+	                              .getSingleResult();
+	    return count > 0;
+	}
+	
+	public boolean existByISBN13(String isbn13) {
+		 String jpql = "SELECT COUNT(b) FROM Book b WHERE b.isbn13 = :isbn13";
+		    Long count = entityManager.createQuery(jpql, Long.class)
+		                              .setParameter("isbn13", isbn13)
+		                              .getSingleResult();
+		    return count > 0;
+	}
+	
 	public Book saveBook(Book newBook) {
 		  if (newBook.getId() == null) {
 		        entityManager.persist(newBook);
