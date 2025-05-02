@@ -142,6 +142,8 @@ public class BookService {
 					req.getIsbn13(), 
 					req.getPages(), 
 					true);
+			
+			bookDAO.saveBook(newBook);
 		}
 
 		ApiResponse<Book> apiResponse = new ApiResponse<>(200,"New books created", null ,timeNow);
